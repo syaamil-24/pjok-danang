@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PJOK Futsal SD - Media Pembelajaran Interaktif</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        court: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            400: '#38bdf8',
+                            500: '#0284c7', // Biru Lapangan Futsal Utama
+                            600: '#0369a1',
+                            800: '#075985',
+                            950: '#082f49',
+                        },
+                        turf: {
+                            100: '#d1fae5',
+                            400: '#34d399',
+                            500: '#10b981', // Hijau Sintetis Cerah
+                            600: '#059669',
+                        },
+                        sport: {
+                            yellow: '#facc15', // Kuning Cerah
+                            orange: '#f97316', // Oranye Enerjik
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Fredoka', 'cursive', 'sans-serif'],
+                        body: ['Nunito', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #F0F9FF;
+        }
+        h1, h2, h3, .font-heading {
+            font-family: 'Fredoka', cursive, sans-serif;
+            letter-spacing: 0.015em;
+        }
+        .bounce-slow {
+            animation: bounceSlow 2.8s ease-in-out infinite;
+        }
+        @keyframes bounceSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        .spin-ball {
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .spin-ball:hover {
+            transform: rotate(360deg) scale(1.1);
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #E0F2FE;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0284C7;
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen selection:bg-court-500 selection:text-white">
+
+    <!-- ==================== 1. HEADER / NAVBAR ==================== -->
+    <header class="sticky top-0 z-50 bg-slate-900 text-white shadow-xl border-b-4 border-sport-yellow">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Brand & Creator Identity -->
+            <a href="#hero" class="flex items-center gap-3 group">
+                <div class="bg-sport-yellow text-slate-950 p-2 rounded-2xl font-bold text-xl w-11 h-11 flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition">
+                    ⚽
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-wide leading-tight font-heading text-white">
+                        PJOK <span class="text-court-400">FUTSAL</span> <span class="text-sport-yellow">SD</span>
+                    </h1>
+                    <p class="text-xs text-court-200 font-bold hidden sm:block">
+                        Danang Wahyu Pratama • NPM: 41182191240018
+                    </p>
+                </div>
+            </a>
+
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center gap-1.5 font-heading font-semibold text-sm">
+                <a href="#pengenalan" class="px-3 py-2 rounded-xl hover:bg-slate-800 hover:text-court-400 transition">
+                    Pengenalan
+                </a>
+                <a href="#simulator" class="px-3.5 py-2 rounded-xl bg-turf-500 text-slate-950 font-extrabold hover:bg-turf-400 transition shadow flex items-center gap-1.5">
+                    <i class="fa-solid fa-gamepad"></i> Simulator Futsal 2D
+                </a>
+                <a href="#teknik" class="px-3 py-2 rounded-xl hover:bg-slate-800 hover:text-court-400 transition">
+                    4 Teknik Dasar
+                </a>
+                <a href="#peraturan" class="px-3 py-2 rounded-xl hover:bg-slate-800 hover:text-court-400 transition">
+                    Aturan & Sportivitas
+                </a>
+                <a href="#kuis" class="px-3.5 py-2 bg-sport-yellow text-slate-950 font-extrabold rounded-xl hover:bg-yellow-300 transition shadow">
+                    Kuis SD ⭐️
+                </a>
+                <a href="#pembuat" class="px-3 py-2 rounded-xl hover:bg-slate-800 text-sport-orange">
+                    Pembuat
+                </a>
+            </nav>
+
+            <!-- Audio Stop Global Button + Mobile Toggle -->
+            <div class="flex items-center gap-2">
+                <button onclick="stopAllSpeech()" title="Hentikan Suara Narasi" class="bg-rose-500 hover:bg-rose-600 text-white px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow transition">
+                    <i class="fa-solid fa-volume-xmark"></i> <span class="hidden sm:inline">Stop Audio</span>
+                </button>
+                <button id="menu-btn" class="lg:hidden text-white text-2xl focus:outline-none p-1.5 rounded-xl hover:bg-slate-800" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-slate-950 px-4 pt-2 pb-4 space-y-2 font-heading border-t border-slate-800">
+            <a href="#pengenalan" class="block py-2.5 px-3 hover:bg-slate-800 rounded-xl text-white">1. Pengenalan & Alat Futsal</a>
+            <a href="#simulator" class="block py-2.5 px-3 bg-turf-500 text-slate-950 font-bold rounded-xl">2. Simulator Lapangan Futsal 2D ⚽</a>
+            <a href="#teknik" class="block py-2.5 px-3 hover:bg-slate-800 rounded-xl text-white">3. 4 Teknik Dasar Futsal</a>
+            <a href="#peraturan" class="block py-2.5 px-3 hover:bg-slate-800 rounded-xl text-white">4. Peraturan & Sportivitas SD</a>
+            <a href="#kuis" class="block py-2.5 px-3 bg-sport-yellow text-slate-950 font-bold rounded-xl">5. Kuis Interaktif Anak SD ⭐️</a>
+            <a href="#pembuat" class="block py-2.5 px-3 hover:bg-slate-800 rounded-xl text-sport-orange font-bold">Profil Pembuat (Danang Wahyu Pratama)</a>
+        </div>
+    </header>
+
+    <!-- ==================== 2. HERO BANNER ==================== -->
+    <section id="hero" class="bg-gradient-to-br from-court-600 via-court-500 to-turf-500 text-white py-12 md:py-16 px-4 relative overflow-hidden border-b-4 border-court-800">
+        <!-- Court Lines Pattern Overlay -->
+        <div class="absolute inset-0 pointer-events-none opacity-15">
+            <svg class="w-full h-full" viewBox="0 0 800 400" preserveAspectRatio="none">
+                <rect x="20" y="20" width="760" height="360" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+                <line x1="400" y1="20" x2="400" y2="380" stroke="#FFFFFF" stroke-width="6"/>
+                <circle cx="400" cy="200" r="70" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+            </svg>
+        </div>
+
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+            <!-- Left Content -->
+            <div class="text-center md:text-left md:w-3/5 space-y-4">
+                <div class="inline-flex flex-wrap items-center justify-center md:justify-start gap-2">
+                    <span class="bg-sport-yellow text-slate-950 px-4 py-1.5 rounded-full text-xs md:text-sm font-black uppercase tracking-wider shadow font-heading">
+                        <i class="fa-solid fa-futbol"></i> Materi PJOK Sekolah Dasar (SD)
+                    </span>
+                    <button onclick="playWhistleSound()" class="bg-slate-900/80 hover:bg-slate-900 text-sport-yellow px-3.5 py-1.5 rounded-full text-xs font-extrabold flex items-center gap-1.5 border border-sport-yellow/50 transition shadow">
+                        <i class="fa-solid fa-bullhorn"></i> Bunyikan Peluit Wasit!
+                    </button>
+                </div>
+
+                <h2 class="text-3xl md:text-5xl font-black leading-tight font-heading drop-shadow">
+                    SERUNYA BELAJAR <br/><span class="text-sport-yellow">OLAHRAGA FUTSAL</span>
+                </h2>
+                <p class="text-white/95 text-base md:text-lg font-semibold leading-relaxed">
+                    Ayo teman-teman SD! Pelajari cara mengumpan (*passing*), menggiring (*dribbling*), menahan bola dengan telapak kaki (*sole*), dan menendang ke gawang (*shooting*) lewat simulasi interaktif!
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-wrap justify-center md:justify-start gap-3 pt-2">
+                    <a href="#simulator" onclick="playKickSound()" class="bg-sport-yellow hover:bg-yellow-300 text-slate-950 font-black px-6 py-3.5 rounded-2xl transform hover:-translate-y-1 transition shadow-lg flex items-center gap-2 font-heading text-base">
+                        <i class="fa-solid fa-play"></i> Mainkan Simulator 2D
+                    </a>
+                    <a href="#kuis" onclick="playWhistleSound()" class="bg-sport-orange hover:bg-orange-400 text-white px-6 py-3.5 rounded-2xl font-black transform hover:-translate-y-1 transition shadow-lg flex items-center gap-2 font-heading text-base border-2 border-white/30">
+                        <i class="fa-solid fa-trophy"></i> Kuis Futsal (5 Soal)
+                    </a>
+                </div>
+
+                <!-- Creator Badge in Hero -->
+                <div class="pt-4 mt-2 border-t border-white/25 flex items-center justify-center md:justify-start gap-3">
+                    <div class="w-11 h-11 rounded-2xl bg-slate-900 text-sport-yellow font-black flex items-center justify-center text-sm font-heading shadow-md border-2 border-sport-yellow flex-shrink-0">
+                        DWP
+                    </div>
+                    <div class="text-left text-xs md:text-sm">
+                        <p class="font-bold text-white">Disusun oleh: <span class="text-sport-yellow font-extrabold">Danang Wahyu Pratama</span></p>
+                        <p class="text-court-100 font-bold">NPM: <span class="bg-slate-900/70 text-white px-2 py-0.5 rounded font-mono">41182191240018</span> • Pendidikan Jasmani SD</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Illustration: Kid Futsal Player + Size 4 Futsal Ball SVG -->
+            <div class="md:w-2/5 flex justify-center">
+                <div onclick="triggerHeroKick()" class="relative w-72 h-72 md:w-80 md:h-80 bg-white/15 backdrop-blur-md rounded-3xl p-4 border-4 border-sport-yellow shadow-2xl flex flex-col items-center justify-center cursor-pointer bounce-slow group">
+                    <svg id="hero-futsal-svg" viewBox="0 0 320 260" class="w-full h-full drop-shadow-md">
+                        <!-- Mini Court Floor -->
+                        <ellipse cx="160" cy="225" rx="135" ry="22" fill="#0369A1" opacity="0.6"/>
+                        <ellipse cx="160" cy="222" rx="120" ry="16" fill="#38BDF8" stroke="#FFFFFF" stroke-width="2"/>
+
+                        <!-- Kid Futsal Player Character (Energetic Pose) -->
+                        <!-- Left Standing Leg -->
+                        <path d="M 135 155 L 125 205" stroke="#FDBA74" stroke-width="14" stroke-linecap="round"/>
+                        <!-- Left Sock & Futsal Shoe -->
+                        <path d="M 128 185 L 124 206" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+                        <rect x="112" y="202" width="26" height="11" rx="5" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+
+                        <!-- Right Kicking Leg -->
+                        <path d="M 155 155 L 185 188" stroke="#FDBA74" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M 172 174 L 188 192" stroke="#FFFFFF" stroke-width="15" stroke-linecap="round"/>
+                        <rect x="180" y="186" width="28" height="12" rx="5" transform="rotate(20 180 186)" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+
+                        <!-- Shorts (Blue) -->
+                        <rect x="122" y="135" width="46" height="28" rx="8" fill="#0F172A"/>
+                        <line x1="145" y1="145" x2="145" y2="163" stroke="#38BDF8" stroke-width="2"/>
+
+                        <!-- Jersey Shirt (Bright Yellow & Green Trim) -->
+                        <path d="M 118 92 L 172 92 L 168 140 L 122 140 Z" fill="#FACC15" stroke="#CA8A04" stroke-width="2"/>
+                        <!-- Jersey Number 10 -->
+                        <text x="145" y="123" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="900" font-size="20" fill="#0F172A">10</text>
+
+                        <!-- Arms (Balanced Pose) -->
+                        <path d="M 120 98 L 90 122" stroke="#FDBA74" stroke-width="11" stroke-linecap="round"/>
+                        <path d="M 170 98 L 202 82" stroke="#FDBA74" stroke-width="11" stroke-linecap="round"/>
+                        <!-- Jersey Sleeves -->
+                        <path d="M 120 98 L 106 109" stroke="#10B981" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M 170 98 L 184 91" stroke="#10B981" stroke-width="14" stroke-linecap="round"/>
+
+                        <!-- Happy Kid Head -->
+                        <circle cx="145" cy="64" r="24" fill="#FDBA74" stroke="#EA580C" stroke-width="1.5"/>
+                        <!-- Spiky Sporty Hair -->
+                        <path d="M 121 60 C 120 35, 170 35, 169 60 C 162 48, 152 46, 145 50 C 138 46, 128 48, 121 60 Z" fill="#1E293B"/>
+                        <!-- Eyes & Big Smile -->
+                        <circle cx="138" cy="62" r="2.8" fill="#0F172A"/>
+                        <circle cx="153" cy="62" r="2.8" fill="#0F172A"/>
+                        <path d="M 138 71 Q 145 79, 153 71" fill="none" stroke="#0F172A" stroke-width="2.5" stroke-linecap="round"/>
+
+                        <!-- Futsal Ball (Size 4 with Pentagon Pattern) -->
+                        <g transform="translate(232, 196)">
+                            <circle cx="0" cy="0" r="22" fill="#FFFFFF" stroke="#0F172A" stroke-width="2.5"/>
+                            <!-- Center Pentagon -->
+                            <polygon points="0,-9 9,-2 5,8 -5,8 -9,-2" fill="#0F172A"/>
+                            <!-- Outer Patch Lines -->
+                            <line x1="0" y1="-9" x2="0" y2="-21" stroke="#0F172A" stroke-width="2"/>
+                            <line x1="9" y1="-2" x2="20" y2="-6" stroke="#0F172A" stroke-width="2"/>
+                            <line x1="5" y1="8" x2="13" y2="18" stroke="#0F172A" stroke-width="2"/>
+                            <line x1="-5" y1="8" x2="-13" y2="18" stroke="#0F172A" stroke-width="2"/>
+                            <line x1="-9" y1="-2" x2="-20" y2="-6" stroke="#0F172A" stroke-width="2"/>
+                            <!-- Speed Motion Lines -->
+                            <line x1="-32" y1="-8" x2="-25" y2="-8" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/>
+                            <line x1="-35" y1="2" x2="-26" y2="2" stroke="#FACC15" stroke-width="3" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                    <span class="bg-slate-900 text-sport-yellow text-xs font-extrabold px-4 py-1.5 rounded-full shadow border border-sport-yellow font-heading">
+                        Klik Pemain untuk Menendang! ⚽💥
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="max-w-5xl mx-auto px-4 py-10 space-y-14 flex-grow">
+
+        <!-- 3. PENGENALAN FUTSAL & PERALATAN SD -->
+        <section id="pengenalan" class="bg-white rounded-3xl p-6 md:p-8 shadow-md border-3 border-court-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="bg-court-100 text-court-600 p-3.5 rounded-2xl text-2xl font-black">
+                        <i class="fa-solid fa-futbol"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 font-heading">Mengenal Olahraga Futsal</h2>
+                        <p class="text-sm text-slate-500 font-semibold">Apa bedanya futsal dengan sepak bola biasa? Yuk kenali perlengkapannya!</p>
+                    </div>
+                </div>
+                <button onclick="speakText('Futsal adalah permainan bola beregu yang dimainkan di dalam ruangan atau lapangan datar oleh dua tim, masing-masing berjumlah 5 pemain. Bola futsal berukuran nomor 4 dengan pantulan lebih rendah agar mudah dikontrol dengan telapak kaki.')" class="self-start sm:self-center bg-court-50 hover:bg-court-100 text-court-700 font-extrabold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition border-2 border-court-200">
+                    <i class="fa-solid fa-volume-high text-base"></i> Dengarkan Penjelasan
+                </button>
+            </div>
+
+            <!-- 4 Equipment & Court Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Item 1: Bola Futsal Ukuran 4 -->
+                <div class="bg-court-50 rounded-2xl p-5 border-2 border-court-200 flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-3 shadow border border-court-200 spin-ball cursor-pointer">
+                            <!-- Custom Futsal Ball SVG -->
+                            <svg viewBox="0 0 60 60" class="w-10 h-10">
+                                <circle cx="30" cy="30" r="26" fill="#FFFFFF" stroke="#0F172A" stroke-width="3"/>
+                                <polygon points="30,18 41,26 37,39 23,39 19,26" fill="#0284C7"/>
+                                <line x1="30" y1="18" x2="30" y2="4" stroke="#0F172A" stroke-width="2.5"/>
+                                <line x1="41" y1="26" x2="54" y2="21" stroke="#0F172A" stroke-width="2.5"/>
+                                <line x1="37" y1="39" x2="46" y2="51" stroke="#0F172A" stroke-width="2.5"/>
+                                <line x1="23" y1="39" x2="14" y2="51" stroke="#0F172A" stroke-width="2.5"/>
+                                <line x1="19" y1="26" x2="6" y2="21" stroke="#0F172A" stroke-width="2.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">1. Bola Futsal (Ukuran 4)</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3 font-semibold">
+                            Bola futsal lebih kecil (ukuran 4) dan pantulannya lebih rendah (*low bounce*) daripada bola sepak biasa.
+                        </p>
+                    </div>
+                    <button onclick="speakText('Bola futsal menggunakan ukuran nomor 4 yang lebih kecil dan tidak memantul terlalu tinggi, sehingga mudah dikontrol di lapangan datar.')" class="text-xs text-court-600 font-extrabold hover:underline flex items-center gap-1.5">
+                        <i class="fa-solid fa-volume-high"></i> Suara Narasi
+                    </button>
+                </div>
+
+                <!-- Item 2: Lapangan Futsal -->
+                <div class="bg-turf-100/60 rounded-2xl p-5 border-2 border-turf-400/50 flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <div class="w-14 h-14 bg-court-500 rounded-2xl flex items-center justify-center mb-3 shadow text-white">
+                            <!-- Mini Court SVG -->
+                            <svg viewBox="0 0 64 44" class="w-11 h-8">
+                                <rect x="2" y="2" width="60" height="40" rx="3" fill="#0284C7" stroke="#FFFFFF" stroke-width="2.5"/>
+                                <line x1="32" y1="2" x2="32" y2="42" stroke="#FFFFFF" stroke-width="2"/>
+                                <circle cx="32" cy="22" r="7" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                                <path d="M 2 11 A 11 11 0 0 1 2 33" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                                <path d="M 62 11 A 11 11 0 0 0 62 33" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">2. Lapangan Datar</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3 font-semibold">
+                            Permukaan lapangan rata (vinyl, kayu parket, atau rumput sintetis) dengan garis batas dan gawang berukuran 3m x 2m.
+                        </p>
+                    </div>
+                    <button onclick="speakText('Lapangan futsal berbentuk persegi panjang dengan permukaan rata dan gawang berukuran lebar 3 meter dan tinggi 2 meter.')" class="text-xs text-turf-600 font-extrabold hover:underline flex items-center gap-1.5">
+                        <i class="fa-solid fa-volume-high"></i> Suara Narasi
+                    </button>
+                </div>
+
+                <!-- Item 3: Sepatu & Pelindung -->
+                <div class="bg-amber-50 rounded-2xl p-5 border-2 border-amber-300 flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <div class="w-14 h-14 bg-sport-yellow text-slate-950 rounded-2xl flex items-center justify-center text-2xl font-bold mb-3 shadow">
+                            👟
+                        </div>
+                        <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">3. Sepatu Sol Datar</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3 font-semibold">
+                            Wajib memakai sepatu bersol karet datar (bukan sepatu bola berpaku/pul) serta pelindung tulang kering (*shinguard*).
+                        </p>
+                    </div>
+                    <button onclick="speakText('Pemain futsal memakai sepatu bersol karet datar tanpa pul agar tidak licin, serta pelindung tulang kering dan kaos kaki panjang untuk keselamatan.')" class="text-xs text-amber-700 font-extrabold hover:underline flex items-center gap-1.5">
+                        <i class="fa-solid fa-volume-high"></i> Suara Narasi
+                    </button>
+                </div>
+
+                <!-- Item 4: 5 Pemain Per Tim -->
+                <div class="bg-orange-50 rounded-2xl p-5 border-2 border-orange-300 flex flex-col justify-between hover:shadow-md transition">
+                    <div>
+                        <div class="w-14 h-14 bg-sport-orange text-white rounded-2xl flex items-center justify-center text-2xl font-black mb-3 shadow font-heading">
+                            5v5
+                        </div>
+                        <h3 class="font-heading text-lg font-bold text-slate-900 mb-1">4. Jumlah Pemain (5 Orang)</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3 font-semibold">
+                            Setiap tim bermain dengan 5 orang di lapangan (1 penjaga gawang/kiper dan 4 pemain lapangan).
+                        </p>
+                    </div>
+                    <button onclick="speakText('Setiap tim futsal terdiri dari 5 pemain inti di dalam lapangan, yaitu 1 penjaga gawang dan 4 pemain lapangan.')" class="text-xs text-orange-700 font-extrabold hover:underline flex items-center gap-1.5">
+                        <i class="fa-solid fa-volume-high"></i> Suara Narasi
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. SIMULATOR VISUAL INTERAKTIF LAPANGAN FUTSAL 2D (HTML5 CANVAS) -->
+        <section id="simulator" class="bg-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-2xl border-4 border-sport-yellow relative overflow-hidden">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-5">
+                <div>
+                    <span class="bg-turf-500 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider inline-flex items-center gap-1.5 font-heading shadow">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Simulator Lapangan Futsal 2D Interaktif
+                    </span>
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-white mt-1.5 font-heading">SIMULASI TEKNIK DASAR FUTSAL ⚽</h2>
+                    <p class="text-slate-300 text-xs md:text-sm font-medium">Pilih salah satu teknik dasar di samping untuk melihat animasi gerakan di lapangan!</p>
+                </div>
+
+                <!-- Mode Selector Buttons -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="setFutsalMode('passing')" id="mode-passing" class="px-3.5 py-2 rounded-xl text-xs font-extrabold font-heading bg-sport-yellow text-slate-950 shadow transition">
+                        1. Passing
+                    </button>
+                    <button onclick="setFutsalMode('dribbling')" id="mode-dribbling" class="px-3.5 py-2 rounded-xl text-xs font-extrabold font-heading bg-slate-800 text-slate-200 hover:bg-slate-700 transition">
+                        2. Dribbling
+                    </button>
+                    <button onclick="setFutsalMode('control')" id="mode-control" class="px-3.5 py-2 rounded-xl text-xs font-extrabold font-heading bg-slate-800 text-slate-200 hover:bg-slate-700 transition">
+                        3. Control (Sole)
+                    </button>
+                    <button onclick="setFutsalMode('shooting')" id="mode-shooting" class="px-3.5 py-2 rounded-xl text-xs font-extrabold font-heading bg-slate-800 text-slate-200 hover:bg-slate-700 transition">
+                        4. Shooting
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Canvas Container -->
+            <div class="relative rounded-2xl overflow-hidden border-4 border-court-400 shadow-inner h-80 md:h-[410px] bg-court-500">
+                <canvas id="futsalCanvas" class="w-full h-full block cursor-pointer" onclick="triggerCanvasKick()"></canvas>
+
+                <!-- Top-Right Status Badge -->
+                <div id="sim-badge" class="absolute top-3 right-3 bg-slate-950/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-sport-yellow text-xs font-extrabold text-sport-yellow flex items-center gap-2 shadow">
+                    <span class="w-2.5 h-2.5 rounded-full bg-turf-400 animate-ping"></span>
+                    <span id="sim-badge-text">Passing: Kaki Bagian Dalam</span>
+                </div>
+
+                <!-- Bottom Control Bar -->
+                <div class="absolute bottom-3 left-3 right-3 bg-slate-950/90 backdrop-blur-md p-3 rounded-2xl border border-white/15 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="toggleSimPlay()" id="btn-play-pause" class="bg-court-400 hover:bg-court-300 text-slate-950 font-black px-4 py-2 rounded-xl flex items-center gap-1.5 shadow transition font-heading">
+                            <i class="fa-solid fa-pause"></i> Pause
+                        </button>
+                        <button onclick="triggerCanvasKick()" class="bg-sport-orange hover:bg-orange-400 text-white font-black px-4 py-2 rounded-xl flex items-center gap-1.5 shadow transition font-heading">
+                            ⚽ Tendang Bola!
+                        </button>
+                        <button onclick="toggleVectors()" id="btn-vector" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 px-3 py-2 rounded-xl font-bold transition">
+                            Panah Arah: <span id="vector-status" class="text-sport-yellow">ON</span>
+                        </button>
+                    </div>
+
+                    <!-- Speed Presets -->
+                    <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1.5 rounded-xl border border-slate-700">
+                        <span class="text-slate-300 font-bold font-heading mr-1">Kecepatan:</span>
+                        <button onclick="setSimSpeed(0.5, this)" class="speed-btn px-2.5 py-1 rounded-lg font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">Pelan</button>
+                        <button onclick="setSimSpeed(1.0, this)" class="speed-btn px-2.5 py-1 rounded-lg font-bold bg-turf-500 text-slate-950">Normal</button>
+                        <button onclick="setSimSpeed(1.7, this)" class="speed-btn px-2.5 py-1 rounded-lg font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">Cepat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Instructional Caption -->
+            <div class="mt-3 bg-slate-950/60 border border-slate-700 rounded-2xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-2">
+                <p id="sim-caption" class="text-xs md:text-sm text-court-200 font-bold text-center sm:text-left">
+                    💡 <strong>Passing (Mengumpan):</strong> Ayunkan kaki bagian dalam ke arah bola untuk mengoper bola mendatar secara akurat kepada teman satu tim.
+                </p>
+                <button onclick="speakCurrentSimCaption()" class="bg-court-500 hover:bg-court-400 text-white px-3.5 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-1.5 flex-shrink-0 transition">
+                    <i class="fa-solid fa-volume-high"></i> Bacakan
+                </button>
+            </div>
+        </section>
+
+        <!-- 5. MATERI 4 TEKNIK DASAR FUTSAL SD -->
+        <section id="teknik" class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="bg-court-100 text-court-800 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider font-heading">Materi Inti PJOK SD</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 mt-2 font-heading">4 TEKNIK DASAR PERMAINAN FUTSAL</h2>
+                <p class="text-slate-600 text-sm mt-1 font-semibold">Klik kartu teknik di bawah ini untuk membaca dan mendengarkan langkah-langkah gerakannya!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Teknik 1: Passing -->
+                <div class="bg-white rounded-3xl p-6 shadow-md border-3 border-court-200 hover:border-court-500 transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-14 h-14 bg-court-500 text-white rounded-2xl flex items-center justify-center text-3xl shadow group-hover:scale-105 transition">
+                                🤝
+                            </div>
+                            <button onclick="speakText('Teknik 1: Passing atau Mengumpan. Letakkan kaki tumpu di samping bola, putar pergelangan kaki tendang ke luar, lalu ayunkan kaki bagian dalam mengenai bagian tengah bola.')" class="bg-court-50 hover:bg-court-100 text-court-700 p-2.5 rounded-xl transition" title="Dengarkan Materi">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                        </div>
+                        <span class="bg-court-100 text-court-800 font-extrabold text-xs px-3 py-1 rounded-lg font-heading">Teknik Dasar 1</span>
+                        <h3 class="font-heading text-xl font-extrabold text-slate-900 mt-1.5 mb-2">Passing (Mengumpan Bola)</h3>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4 font-semibold">
+                            Mengoper bola mendatar kepada teman satu tim menggunakan <strong>kaki bagian dalam</strong> agar arah bola tepat sasaran dan mudah diterima.
+                        </p>
+                    </div>
+                    <button onclick="openDetailModal('passing')" class="w-full bg-court-500 hover:bg-court-600 text-white font-extrabold py-3 rounded-2xl transition text-xs md:text-sm shadow font-heading flex items-center justify-center gap-2">
+                        Lihat Langkah Gerakan <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Teknik 2: Dribbling -->
+                <div class="bg-white rounded-3xl p-6 shadow-md border-3 border-turf-400/50 hover:border-turf-500 transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-14 h-14 bg-turf-500 text-slate-950 rounded-2xl flex items-center justify-center text-3xl shadow group-hover:scale-105 transition">
+                                ⚡
+                            </div>
+                            <button onclick="speakText('Teknik 2: Dribbling atau Menggiring Bola. Dorong bola perlahan menggunakan punggung kaki, kaki bagian luar, atau sol sepatu sambil pandangan melihat ke depan.')" class="bg-turf-100 hover:bg-turf-400/30 text-turf-600 p-2.5 rounded-xl transition" title="Dengarkan Materi">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                        </div>
+                        <span class="bg-turf-100 text-turf-600 font-extrabold text-xs px-3 py-1 rounded-lg font-heading">Teknik Dasar 2</span>
+                        <h3 class="font-heading text-xl font-extrabold text-slate-900 mt-1.5 mb-2">Dribbling (Menggiring Bola)</h3>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4 font-semibold">
+                            Membawa bola berlari melewati lawan dengan sentuhan-sentuhan kecil menggunakan <strong>kaki bagian luar, punggung kaki, atau sol sepatu</strong>.
+                        </p>
+                    </div>
+                    <button onclick="openDetailModal('dribbling')" class="w-full bg-turf-500 hover:bg-turf-600 text-slate-950 hover:text-white font-extrabold py-3 rounded-2xl transition text-xs md:text-sm shadow font-heading flex items-center justify-center gap-2">
+                        Lihat Langkah Gerakan <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Teknik 3: Control / Stopping (Ciri Khas Futsal!) -->
+                <div class="bg-white rounded-3xl p-6 shadow-md border-3 border-amber-300 hover:border-sport-yellow transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-14 h-14 bg-sport-yellow text-slate-950 rounded-2xl flex items-center justify-center text-3xl shadow group-hover:scale-105 transition">
+                                👟
+                            </div>
+                            <button onclick="speakText('Teknik 3: Control atau Menahan Bola. Ciri khas utama futsal adalah menghentikan bola menggunakan telapak kaki atau sole sepatu dengan cara menginjak lembut bagian atas bola.')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 p-2.5 rounded-xl transition" title="Dengarkan Materi">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                        </div>
+                        <span class="bg-amber-100 text-amber-800 font-extrabold text-xs px-3 py-1 rounded-lg font-heading">Teknik Dasar 3 • Khas Futsal!</span>
+                        <h3 class="font-heading text-xl font-extrabold text-slate-900 mt-1.5 mb-2">Control / Stopping (Telapak Kaki)</h3>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4 font-semibold">
+                            Menghentikan bola operan teman menggunakan <strong>telapak kaki (sole sepatu)</strong> agar bola berhenti diam di bawah kaki dan tidak memantul jauh.
+                        </p>
+                    </div>
+                    <button onclick="openDetailModal('control')" class="w-full bg-sport-yellow hover:bg-yellow-300 text-slate-950 font-extrabold py-3 rounded-2xl transition text-xs md:text-sm shadow font-heading flex items-center justify-center gap-2">
+                        Lihat Langkah Gerakan <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Teknik 4: Shooting -->
+                <div class="bg-white rounded-3xl p-6 shadow-md border-3 border-orange-300 hover:border-sport-orange transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-14 h-14 bg-sport-orange text-white rounded-2xl flex items-center justify-center text-3xl shadow group-hover:scale-105 transition">
+                                🎯
+                            </div>
+                            <button onclick="speakText('Teknik 4: Shooting atau Menendang ke Gawang. Ayunkan kaki tendang dengan kuat menggunakan punggung kaki atau ujung sepatu untuk mencetak gol ke gawang lawan.')" class="bg-orange-50 hover:bg-orange-100 text-orange-700 p-2.5 rounded-xl transition" title="Dengarkan Materi">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                        </div>
+                        <span class="bg-orange-100 text-orange-800 font-extrabold text-xs px-3 py-1 rounded-lg font-heading">Teknik Dasar 4</span>
+                        <h3 class="font-heading text-xl font-extrabold text-slate-900 mt-1.5 mb-2">Shooting (Menendang ke Gawang)</h3>
+                        <p class="text-xs md:text-sm text-slate-600 leading-relaxed mb-4 font-semibold">
+                            Menendang bola dengan keras dan terarah ke gawang menggunakan <strong>punggung kaki</strong> atau ujung sepatu (*toe poke*) untuk mencetak gol!
+                        </p>
+                    </div>
+                    <button onclick="openDetailModal('shooting')" class="w-full bg-sport-orange hover:bg-orange-600 text-white font-extrabold py-3 rounded-2xl transition text-xs md:text-sm shadow font-heading flex items-center justify-center gap-2">
+                        Lihat Langkah Gerakan <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. PERATURAN DASAR & SPORTIVITAS ANAK SD -->
+        <section id="peraturan" class="bg-white rounded-3xl p-6 md:p-8 shadow-md border-3 border-court-200">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="bg-sport-yellow text-slate-950 p-3.5 rounded-2xl text-2xl font-black shadow">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 font-heading">Aturan Dasar & Sportivitas SD</h2>
+                        <p class="text-sm text-slate-500 font-semibold">Bermain jujur, kompak, dan menjaga keselamatan teman di lapangan</p>
+                    </div>
+                </div>
+                <button onclick="speakText('Aturan dasar futsal untuk anak SD: Pertama, bola keluar garis samping dikembalikan dengan tendangan ke dalam atau kick-in, bukan lemparan tangan. Kedua, dilarang melakukan sliding tackle atau tekel meluncur agar tidak mencederai teman. Ketiga, selalu menjunjung tinggi sportivitas dan fair play.')" class="self-start sm:self-center bg-amber-50 hover:bg-amber-100 text-amber-800 font-extrabold px-4 py-2.5 rounded-xl text-xs flex items-center gap-2 transition border border-amber-300">
+                    <i class="fa-solid fa-volume-high"></i> Dengarkan Aturan
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Peraturan Unik Futsal -->
+                <div class="bg-court-50 rounded-2xl p-5 border-2 border-court-300 space-y-3">
+                    <h3 class="font-heading font-extrabold text-lg text-court-950 flex items-center gap-2">
+                        <i class="fa-solid fa-clipboard-check text-court-600 text-xl"></i> ATURAN PENTING DALAM FUTSAL
+                    </h3>
+                    <ul class="space-y-2.5 text-xs md:text-sm text-slate-700 font-bold">
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-court-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">1</span>
+                            <span><strong>Tendangan Ke Dalam (Kick-In):</strong> Jika bola keluar garis samping, bola ditendang dari atas garis (tidak dilempar dengan tangan).</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-court-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">2</span>
+                            <span><strong>Pergantian Pemain Bebas:</strong> Pemain cadangan boleh masuk bergantian kapan saja tanpa harus menunggu permainan berhenti.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="bg-court-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5">3</span>
+                            <span><strong>Waktu 4 Detik:</strong> Saat melakukan <em>kick-in</em> atau tendangan sudut, bola harus sudah ditendang maksimal dalam 4 detik.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Sikap Sportivitas (Fair Play) -->
+                <div class="bg-emerald-50 rounded-2xl p-5 border-2 border-turf-400 space-y-3">
+                    <h3 class="font-heading font-extrabold text-lg text-emerald-950 flex items-center gap-2">
+                        <i class="fa-solid fa-heart text-turf-600 text-xl"></i> SIKAP SPORTIVITAS (FAIR PLAY)
+                    </h3>
+                    <ul class="space-y-2.5 text-xs md:text-sm text-emerald-950 font-bold">
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-turf-600 font-black text-base">✓</span>
+                            <span><strong>Dilarang Sliding Tackle:</strong> Tidak boleh menjatuhkan diri menekel kaki lawan agar semua teman aman dari cedera.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-turf-600 font-black text-base">✓</span>
+                            <span><strong>Kerja Sama Tim:</strong> Tidak egois membawa bola sendiri; rajin mengoper bola kepada teman yang posisinya kosong.</span>
+                        </li>
+                        <li class="flex items-start gap-2.5">
+                            <span class="text-turf-600 font-black text-base">✓</span>
+                            <span><strong>Saling Menghormati:</strong> Berjabat tangan sebelum dan sesudah bertanding, serta mematuhi peluit wasit/guru PJOK.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. KUIS INTERAKTIF ANAK SD (5 SOAL) -->
+        <section id="kuis" class="bg-gradient-to-br from-slate-900 via-court-950 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-sport-yellow relative overflow-hidden">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <span class="bg-sport-yellow text-slate-950 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider inline-block font-heading shadow">
+                    ⭐️ Evaluasi Belajar PJOK SD
+                </span>
+                <h2 class="text-3xl font-extrabold text-white mt-2 font-heading">KUIS PINTAR FUTSAL (5 SOAL)</h2>
+                <p class="text-court-200 text-xs md:text-sm font-semibold">Pilih jawaban yang paling tepat untuk mengumpulkan bintang prestasimu!</p>
+            </div>
+
+            <!-- Quiz Card -->
+            <div id="quiz-container" class="bg-white text-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl max-w-2xl mx-auto border-4 border-court-400">
+                <div class="flex justify-between items-center mb-5 pb-4 border-b border-slate-200">
+                    <span id="question-number" class="font-heading font-extrabold text-court-700 bg-court-100 px-3.5 py-1.5 rounded-xl text-xs md:text-sm">Soal 1 dari 5</span>
+                    <div class="flex items-center gap-1.5 text-sport-yellow text-lg font-extrabold bg-slate-900 px-3 py-1 rounded-xl" id="score-pill">
+                        <i class="fa-solid fa-star"></i> <span id="live-score-text" class="text-white text-xs font-heading">Skor: 0</span>
+                    </div>
+                </div>
+
+                <div class="mb-6 flex items-start justify-between gap-3">
+                    <h3 id="question-text" class="text-base md:text-lg font-extrabold text-slate-900 leading-snug">Memuat pertanyaan...</h3>
+                    <button onclick="readCurrentQuestion()" class="p-2.5 bg-court-100 hover:bg-court-200 text-court-700 rounded-xl text-xs font-bold transition flex-shrink-0" title="Bacakan Soal">
+                        <i class="fa-solid fa-volume-high text-base"></i>
+                    </button>
+                </div>
+
+                <div id="options-container" class="grid grid-cols-1 gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div id="feedback-box" class="hidden mt-4 p-4 rounded-2xl text-center font-bold text-xs md:text-sm"></div>
+
+                <div class="mt-6 flex justify-end">
+                    <button id="next-btn" onclick="nextQuestion()" class="hidden bg-court-500 hover:bg-court-600 text-white font-extrabold px-6 py-3 rounded-2xl transition text-xs md:text-sm flex items-center gap-2 shadow font-heading">
+                        Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quiz Result Card -->
+            <div id="result-container" class="hidden bg-white text-slate-800 rounded-2xl p-8 text-center shadow-2xl max-w-lg mx-auto border-4 border-sport-yellow">
+                <div class="w-20 h-20 bg-amber-100 text-sport-orange rounded-full flex items-center justify-center mx-auto text-5xl mb-4 shadow-inner border-2 border-sport-yellow">
+                    🏆
+                </div>
+                <h3 class="text-2xl font-black text-slate-900 mb-1 font-heading">SELAMAT! KUIS SELESAI!</h3>
+                <p class="text-xs text-slate-500 font-bold mb-2">Nilai Akhir PJOK Futsal Kamu:</p>
+                <div class="text-6xl font-black text-court-600 mb-3 font-heading" id="final-score">100</div>
+                <div id="stars-earned" class="text-2xl text-sport-yellow mb-4">⭐⭐⭐⭐⭐</div>
+                <p id="result-message" class="text-slate-700 text-sm font-bold mb-6">Luar biasa! Kamu sudah menguasai teknik dasar permainan futsal!</p>
+                <button onclick="resetQuiz()" class="bg-turf-500 hover:bg-turf-600 text-slate-950 hover:text-white font-extrabold px-8 py-3.5 rounded-2xl shadow-lg transition transform hover:-translate-y-1 inline-flex items-center gap-2 text-sm font-heading">
+                    <i class="fa-solid fa-rotate-right"></i> Mainkan Kuis Lagi
+                </button>
+            </div>
+        </section>
+
+        <!-- 8. KARTU PROFIL PEMBUAT / PENGEMBANG -->
+        <section id="pembuat" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-court-500 relative overflow-hidden">
+            <div class="flex flex-col md:flex-row items-center gap-6 relative z-10">
+                <div class="w-28 h-28 md:w-36 md:h-36 bg-gradient-to-br from-court-500 via-court-600 to-turf-500 text-white rounded-3xl flex flex-col items-center justify-center shadow-xl border-4 border-sport-yellow flex-shrink-0 font-heading">
+                    <span class="text-4xl md:text-5xl">⚽</span>
+                    <span class="text-xs font-extrabold tracking-widest mt-1 bg-slate-950/60 px-2.5 py-0.5 rounded-full text-sport-yellow">PJOK SD</span>
+                </div>
+                <div class="text-center md:text-left flex-grow">
+                    <span class="bg-court-100 text-court-800 px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider font-heading inline-block mb-2">
+                        Profil Pengembang Media Pembelajaran
+                    </span>
+                    <h3 class="text-2xl md:text-3xl font-black text-slate-900 font-heading">Danang Wahyu Pratama</h3>
+                    <p class="text-court-600 font-extrabold text-base md:text-lg mt-0.5 font-heading">
+                        NPM: <span class="bg-sport-yellow text-slate-950 px-3 py-0.5 rounded-lg tracking-wider font-mono font-black">41182191240018</span>
+                    </p>
+                    <p class="text-slate-600 text-xs md:text-sm mt-3 leading-relaxed font-semibold">
+                        Aplikasi web media pembelajaran PJOK interaktif materi <strong>Teknik Dasar Olahraga Futsal</strong> ini dikembangkan khusus untuk siswa Sekolah Dasar (SD) guna mendukung pembelajaran gerak yang aktif, visual, mudah dipahami, dan menyenangkan.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== 9. FOOTER ==================== -->
+    <footer class="bg-slate-950 text-slate-300 py-7 border-t-4 border-sport-yellow mt-auto">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs md:text-sm space-y-1.5 font-semibold">
+            <p class="text-white font-heading text-base">⚽ Media Pembelajaran PJOK Olahraga Futsal — Jenjang Sekolah Dasar (SD)</p>
+            <p class="text-court-300">
+                Dibuat oleh: <span class="text-sport-yellow font-extrabold">Danang Wahyu Pratama</span> • NPM: <span class="text-white font-mono font-bold">41182191240018</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- ==================== MODAL DETAIL LANGKAH GERAKAN ==================== -->
+    <div id="detail-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 relative shadow-2xl border-4 border-court-400">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold w-9 h-9 flex items-center justify-center rounded-full hover:bg-slate-100">
+                &times;
+            </button>
+            <div id="modal-body" class="space-y-4">
+                <!-- Content injected by JS -->
+            </div>
+            <button onclick="closeDetailModal()" class="mt-6 w-full bg-court-500 hover:bg-court-600 text-white font-extrabold py-3 rounded-2xl transition text-xs md:text-sm shadow font-heading">
+                Mengerti! Tutup Penjelasan 👍
+            </button>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // 1. Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // 2. Web Speech API (Text-to-Speech Bahasa Indonesia)
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'id-ID';
+                utterance.rate = 0.96;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function stopAllSpeech() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        // 3. Web Audio API Sound Synthesizers (No external audio files)
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function ensureAudioCtx() {
+            if (!audioCtx) audioCtx = new AudioCtx();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        // Referee Whistle Sound (Peluit Wasit Futsal)
+        function playWhistleSound() {
+            ensureAudioCtx();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const lfo = audioCtx.createOscillator();
+            const lfoGain = audioCtx.createGain();
+            const mainGain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(2850, now);
+            osc.frequency.linearRampToValueAtTime(3100, now + 0.12);
+            osc.frequency.setValueAtTime(2950, now + 0.35);
+
+            // Pea-whistle trill modulation
+            lfo.frequency.value = 38;
+            lfoGain.gain.value = 140;
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency);
+
+            mainGain.gain.setValueAtTime(0.01, now);
+            mainGain.gain.linearRampToValueAtTime(0.22, now + 0.04);
+            mainGain.gain.setValueAtTime(0.22, now + 0.32);
+            mainGain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+
+            osc.connect(mainGain);
+            mainGain.connect(audioCtx.destination);
+
+            osc.start(now);
+            lfo.start(now);
+            osc.stop(now + 0.45);
+            lfo.stop(now + 0.45);
+        }
+
+        // Futsal Ball Kick Sound (Suara Tendangan Bola)
+        function playKickSound() {
+            ensureAudioCtx();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(175, now);
+            osc.frequency.exponentialRampToValueAtTime(48, now + 0.18);
+
+            gain.gain.setValueAtTime(0.45, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.2);
+        }
+
+        // Goal Cheer Synth (Suara Sorak Gol)
+        function playGoalCheerSound() {
+            ensureAudioCtx();
+            const now = audioCtx.currentTime;
+            const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 - E5 - G5 - C6
+            notes.forEach((freq, i) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, now + i * 0.08);
+                gain.gain.setValueAtTime(0.2, now + i * 0.08);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now + i * 0.08);
+                osc.stop(now + i * 0.08 + 0.35);
+            });
+        }
+
+        // Quiz Answer Feedback Sound
+        function playQuizFeedbackSound(isCorrect) {
+            ensureAudioCtx();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (isCorrect) {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, now); // D5
+                osc.frequency.setValueAtTime(880, now + 0.12); // A5
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.linearRampToValueAtTime(150, now + 0.25);
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
+        function triggerHeroKick() {
+            playKickSound();
+            confetti({ particleCount: 28, spread: 55, origin: { y: 0.45 } });
+        }
+
+        // 4. HTML5 CANVAS 2D FUTSAL COURT SIMULATOR
+        const canvas = document.getElementById('futsalCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let simPlaying = true;
+        let showVectors = true;
+        let futsalMode = 'passing'; // 'passing', 'dribbling', 'control', 'shooting'
+        let simSpeed = 1.0;
+        let simClock = 0;
+        let kickBoostTimer = 0;
+        let goalBannerTimer = 0;
+        let particles = [];
+
+        function resizeCanvas() {
+            if (!canvas.parentElement) return;
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function toggleSimPlay() {
+            simPlaying = !simPlaying;
+            const btn = document.getElementById('btn-play-pause');
+            btn.innerHTML = simPlaying
+                ? `<i class="fa-solid fa-pause"></i> Pause`
+                : `<i class="fa-solid fa-play"></i> Play`;
+        }
+
+        function toggleVectors() {
+            showVectors = !showVectors;
+            document.getElementById('vector-status').textContent = showVectors ? 'ON' : 'OFF';
+        }
+
+        function setSimSpeed(val, btnEl) {
+            simSpeed = val;
+            document.querySelectorAll('.speed-btn').forEach(b => {
+                b.className = "speed-btn px-2.5 py-1 rounded-lg font-bold bg-slate-800 text-slate-300 hover:bg-slate-700";
+            });
+            btnEl.className = "speed-btn px-2.5 py-1 rounded-lg font-bold bg-turf-500 text-slate-950";
+        }
+
+        const modeDetails = {
+            passing: {
+                badge: "Passing: Kaki Bagian Dalam",
+                caption: "💡 Passing (Mengumpan): Pemain A mengoper bola mendatar menggunakan kaki bagian dalam ke Pemain B secara akurat."
+            },
+            dribbling: {
+                badge: "Dribbling: Menggiring Zig-Zag",
+                caption: "💡 Dribbling (Menggiring): Pemain menggiring bola melewati kerucut (cone) latihan dengan sentuhan kaki bagian luar & dalam."
+            },
+            control: {
+                badge: "Control: Menahan Bola (Sole)",
+                caption: "💡 Control / Stopping: Bola datang dari operan dihentikan dengan telapak kaki (sole sepatu) agar bola diam tepat di bawah kaki."
+            },
+            shooting: {
+                badge: "Shooting: Tendangan ke Gawang",
+                caption: "💡 Shooting (Menembak): Pemain menendang bola keras ke sudut gawang melewati penjaga gawang untuk mencetak GOL!"
+            }
+        };
+
+        function setFutsalMode(mode) {
+            futsalMode = mode;
+            simClock = 0;
+            goalBannerTimer = 0;
+            playKickSound();
+
+            ['passing', 'dribbling', 'control', 'shooting'].forEach(m => {
+                const el = document.getElementById('mode-' + m);
+                el.className = (m === mode)
+                    ? "px-3.5 py-2 rounded-xl text-xs font-extrabold font-heading bg-sport-yellow text-slate-950 shadow transition"
+                    : "px-3.5 py-2 rounded-xl text-xs font-extrabold font-heading bg-slate-800 text-slate-200 hover:bg-slate-700 transition";
+            });
+
+            document.getElementById('sim-badge-text').textContent = modeDetails[mode].badge;
+            document.getElementById('sim-caption').innerHTML = modeDetails[mode].caption;
+        }
+
+        function speakCurrentSimCaption() {
+            const rawText = document.getElementById('sim-caption').innerText.replace('💡 ', '');
+            speakText(rawText);
+        }
+
+        function spawnImpactParticles(x, y, color = '#FACC15') {
+            for (let i = 0; i < 16; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const spd = Math.random() * 4 + 1.5;
+                particles.push({
+                    x, y,
+                    vx: Math.cos(angle) * spd,
+                    vy: Math.sin(angle) * spd,
+                    r: Math.random() * 4 + 2,
+                    color,
+                    alpha: 1
+                });
+            }
+        }
+
+        function triggerCanvasKick() {
+            playKickSound();
+            kickBoostTimer = 25;
+            if (futsalMode === 'shooting') {
+                simClock = 1.65; // Jump right into shot phase
+            }
+            spawnImpactParticles(canvas.width * 0.5, canvas.height * 0.5, '#FACC15');
+        }
+
+        // Draw Helper: Arrow Vector
+        function drawArrow(x1, y1, x2, y2, color = '#FACC15', label = '') {
+            if (!showVectors) return;
+            const headLen = 9;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 3;
+            ctx.setLineDash([6, 4]);
+
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+
+            ctx.setLineDash([]);
+            ctx.beginPath();
+            ctx.moveTo(x2, y2);
+            ctx.lineTo(x2 - headLen * Math.cos(angle - Math.PI / 6), y2 - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(x2 - headLen * Math.cos(angle + Math.PI / 6), y2 - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            if (label) {
+                ctx.font = 'bold 11px Fredoka, sans-serif';
+                ctx.fillText(label, (x1 + x2) / 2 - 20, (y1 + y2) / 2 - 10);
+            }
+            ctx.restore();
+        }
+
+        // Draw Helper: Top-Down / Isometric Kid Futsal Player
+        function drawPlayer(x, y, jerseyColor, number, labelText, hasSoleStop = false) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.25)';
+            ctx.beginPath();
+            ctx.ellipse(0, 18, 18, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Body / Jersey
+            ctx.fillStyle = jerseyColor;
+            ctx.strokeStyle = '#0F172A';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(0, 0, 16, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Player Number
+            ctx.fillStyle = (jerseyColor === '#FACC15') ? '#0F172A' : '#FFFFFF';
+            ctx.font = '900 13px Fredoka, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(number, 0, 1);
+
+            // Sole foot indicator if stopping ball
+            if (hasSoleStop) {
+                ctx.fillStyle = '#F97316';
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.roundRect(12, -5, 14, 10, 4);
+                ctx.fill();
+                ctx.stroke();
+            }
+
+            // Label badge below player
+            if (labelText) {
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                ctx.beginPath();
+                ctx.roundRect(-34, 22, 68, 17, 6);
+                ctx.fill();
+
+                ctx.fillStyle = '#FFFFFF';
+                ctx.font = 'bold 10px Nunito, sans-serif';
+                ctx.fillText(labelText, 0, 31);
+            }
+
+            ctx.restore();
+        }
+
+        // Draw Helper: Futsal Ball Size 4
+        function drawFutsalBall(x, y, spinAngle) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Ball Shadow
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.beginPath();
+            ctx.ellipse(2, 9, 10, 5, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.rotate(spinAngle);
+            ctx.fillStyle = '#FFFFFF';
+            ctx.strokeStyle = '#0F172A';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Pentagon center
+            ctx.fillStyle = '#0F172A';
+            ctx.beginPath();
+            for (let i = 0; i < 5; i++) {
+                const a = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+                const px = Math.cos(a) * 4.5;
+                const py = Math.sin(a) * 4.5;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        // Draw Futsal Court Field
+        function drawFutsalCourt(w, h) {
+            const pad = 26;
+            const fieldW = w - pad * 2;
+            const fieldH = h - pad * 2 - 36; // Reserve bottom space for controls
+
+            // Outer Turf Surround (Hijau Sintetis Cerah)
+            ctx.fillStyle = '#10B981';
+            ctx.fillRect(0, 0, w, h);
+
+            // Inner Futsal Court (Biru Muda Cerah)
+            const courtGrad = ctx.createLinearGradient(pad, pad, w - pad, pad + fieldH);
+            courtGrad.addColorStop(0, '#0284C7');
+            courtGrad.addColorStop(0.5, '#0EA5E9');
+            courtGrad.addColorStop(1, '#0284C7');
+            ctx.fillStyle = courtGrad;
+            ctx.fillRect(pad, pad, fieldW, fieldH);
+
+            // Court White Lines
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(pad, pad, fieldW, fieldH);
+
+            // Center Line & Circle
+            const midX = pad + fieldW / 2;
+            const midY = pad + fieldH / 2;
+            ctx.beginPath();
+            ctx.moveTo(midX, pad);
+            ctx.lineTo(midX, pad + fieldH);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(midX, midY, Math.min(fieldH * 0.22, 46), 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.fillStyle = '#FFFFFF';
+            ctx.beginPath();
+            ctx.arc(midX, midY, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Left & Right Penalty Arcs (6m)
+            const penR = Math.min(fieldH * 0.34, 68);
+            ctx.beginPath();
+            ctx.arc(pad, midY, penR, -Math.PI / 2, Math.PI / 2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(pad + fieldW, midY, penR, Math.PI / 2, Math.PI * 1.5);
+            ctx.stroke();
+
+            // Penalty Spots (6m & 10m)
+            ctx.fillRect(pad + penR * 0.85 - 2, midY - 2, 4, 4);
+            ctx.fillRect(pad + fieldW - penR * 0.85 - 2, midY - 2, 4, 4);
+
+            // Left & Right Futsal Goals
+            const goalH = 66;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.strokeStyle = '#FACC15';
+            ctx.lineWidth = 3.5;
+
+            // Left Goal
+            ctx.fillRect(pad - 14, midY - goalH / 2, 14, goalH);
+            ctx.strokeRect(pad - 14, midY - goalH / 2, 14, goalH);
+
+            // Right Goal
+            ctx.fillRect(pad + fieldW, midY - goalH / 2, 14, goalH);
+            ctx.strokeRect(pad + fieldW, midY - goalH / 2, 14, goalH);
+
+            return { pad, fieldW, fieldH, midX, midY };
+        }
+
+        function updateAndDrawSimulator() {
+            const w = canvas.width;
+            const h = canvas.height;
+            const court = drawFutsalCourt(w, h);
+
+            if (simPlaying) {
+                const boost = kickBoostTimer > 0 ? 1.8 : 1.0;
+                simClock += 0.025 * simSpeed * boost;
+                if (kickBoostTimer > 0) kickBoostTimer--;
+                if (goalBannerTimer > 0) goalBannerTimer--;
+            }
+
+            const { pad, fieldW, fieldH, midX, midY } = court;
+
+            // MODE 1: PASSING (Mengumpan Kaki Bagian Dalam)
+            if (futsalMode === 'passing') {
+                const p1X = pad + fieldW * 0.24;
+                const p1Y = midY - 20;
+                const p2X = pad + fieldW * 0.74;
+                const p2Y = midY + 20;
+
+                // Cycle 0 -> 2*PI
+                const t = (Math.sin(simClock * 2.2) + 1) / 2; // 0 to 1 smooth back and forth
+                const ballX = p1X + 22 + (p2X - p1X - 44) * t;
+                const ballY = p1Y + (p2Y - p1Y) * t;
+
+                drawArrow(p1X + 24, p1Y, p2X - 24, p2Y, '#FACC15', 'Umpan Mendatar');
+                drawPlayer(p1X, p1Y, '#FACC15', '7', 'Pengumpan');
+                drawPlayer(p2X, p2Y, '#F97316', '10', 'Penerima');
+                drawFutsalBall(ballX, ballY, simClock * 8);
+            }
+
+            // MODE 2: DRIBBLING (Menggiring Bola Zig-Zag Melewati Cone)
+            else if (futsalMode === 'dribbling') {
+                const startX = pad + fieldW * 0.18;
+                const endX = pad + fieldW * 0.82;
+                const progress = (simClock * 0.32) % 1;
+                const playerX = startX + (endX - startX) * progress;
+                const zigOffset = Math.sin(progress * Math.PI * 4) * 34;
+                const playerY = midY + zigOffset;
+
+                // Draw Training Cones
+                [0.35, 0.52, 0.69].forEach((pos, idx) => {
+                    const cx = pad + fieldW * pos;
+                    const cy = midY + (idx % 2 === 0 ? -12 : 12);
+                    ctx.fillStyle = '#F97316';
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy - 11);
+                    ctx.lineTo(cx + 9, cy + 8);
+                    ctx.lineTo(cx - 9, cy + 8);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+                });
+
+                drawArrow(playerX + 15, playerY, playerX + 65, playerY + Math.cos(progress * Math.PI * 4) * 20, '#FACC15', 'Dribbling');
+                drawPlayer(playerX, playerY, '#FACC15', '10', 'Penggiring');
+                drawFutsalBall(playerX + 20, playerY + 4, simClock * 12);
+            }
+
+            // MODE 3: CONTROL / STOPPING (Menahan Bola dengan Telapak Kaki / Sole)
+            else if (futsalMode === 'control') {
+                const passerX = pad + fieldW * 0.22;
+                const stopperX = pad + fieldW * 0.68;
+                const cycle = simClock % 3.2; // 0..2 ball travels, 2..3.2 ball stopped under sole
+
+                let ballX, isStopped = false;
+                if (cycle < 1.8) {
+                    const ratio = cycle / 1.8;
+                    ballX = passerX + 22 + (stopperX - passerX - 42) * ratio;
+                } else {
+                    ballX = stopperX - 20;
+                    isStopped = true;
+                }
+
+                drawArrow(passerX + 24, midY, stopperX - 28, midY, '#38BDF8', 'Arah Bola Datang');
+                drawPlayer(passerX, midY, '#F97316', '8', 'Pengumpan');
+                drawPlayer(stopperX, midY, '#FACC15', '5', isStopped ? 'Stop (Sole!)' : 'Siap Kontrol', isStopped);
+                drawFutsalBall(ballX, midY, isStopped ? 0 : simClock * 10);
+
+                if (isStopped) {
+                    ctx.fillStyle = '#FACC15';
+                    ctx.font = '900 13px Fredoka, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('✋ STOP DENGAN TELAPAK KAKI (SOLE)!', stopperX, midY - 30);
+                }
+            }
+
+            // MODE 4: SHOOTING (Menendang ke Gawang)
+            else if (futsalMode === 'shooting') {
+                const shooterX = pad + fieldW * 0.56;
+                const shooterY = midY + 14;
+                const gkX = pad + fieldW - 18;
+                const gkY = midY + Math.sin(simClock * 3) * 18;
+
+                const cycle = simClock % 3.4;
+                let ballX = shooterX + 22;
+                let ballY = shooterY - 2;
+
+                if (cycle > 1.4 && cycle <= 2.4) {
+                    const shotRatio = (cycle - 1.4) / 1.0;
+                    ballX = (shooterX + 22) + (pad + fieldW + 6 - (shooterX + 22)) * shotRatio;
+                    ballY = shooterY - 36 * shotRatio; // Aiming top corner
+                } else if (cycle > 2.4) {
+                    ballX = pad + fieldW + 6;
+                    ballY = shooterY - 36;
+                    if (goalBannerTimer === 0 && simPlaying) {
+                        goalBannerTimer = 45;
+                        playGoalCheerSound();
+                        spawnImpactParticles(ballX, ballY, '#FACC15');
+                    }
+                }
+
+                drawArrow(shooterX + 24, shooterY, pad + fieldW, midY - 22, '#F97316', 'Tembakan Gol!');
+                drawPlayer(shooterX, shooterY, '#FACC15', '9', 'Penendang');
+                drawPlayer(gkX, gkY, '#10B981', '1', 'Kiper');
+                drawFutsalBall(ballX, ballY, cycle > 1.4 ? simClock * 18 : 0);
+
+                if (cycle > 2.35) {
+                    ctx.save();
+                    ctx.fillStyle = '#FACC15';
+                    ctx.strokeStyle = '#0F172A';
+                    ctx.lineWidth = 4;
+                    ctx.font = '900 32px Fredoka, sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.strokeText('GOOOLLL!! ⚽🎉', midX, pad + 42);
+                    ctx.fillText('GOOOLLL!! ⚽🎉', midX, pad + 42);
+                    ctx.restore();
+                }
+            }
+
+            // Render Spark Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.03;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                if (p.alpha <= 0) particles.splice(i, 1);
+            }
+        }
+
+        function animateLoop() {
+            updateAndDrawSimulator();
+            requestAnimationFrame(animateLoop);
+        }
+        animateLoop();
+
+        // 5. Detail Modal Content for 4 Basic Techniques
+        const techniqueSteps = {
+            passing: {
+                title: "1. Langkah Passing (Mengumpan Kaki Bagian Dalam)",
+                badge: "Teknik Dasar 1",
+                steps: [
+                    "Berdiri menghadap arah teman yang akan diberikan operan.",
+                    "Letakkan kaki tumpu di samping bola dengan lutut sedikit ditekuk.",
+                    "Putar pergelangan kaki tendang ke arah luar hingga kaki bagian dalam menghadap bola.",
+                    "Ayunkan kaki dari belakang ke depan dan tendang bagian tengah bola agar bola meluncur mendatar."
+                ],
+                speech: "Langkah melakukan passing. Pertama, berdiri menghadap arah sasaran. Kedua, letakkan kaki tumpu di samping bola. Ketiga, putar kaki tendang ke luar dan ayunkan kaki bagian dalam mengenai bagian tengah bola."
+            },
+            dribbling: {
+                title: "2. Langkah Dribbling (Menggiring Bola)",
+                badge: "Teknik Dasar 2",
+                steps: [
+                    "Posisikan tubuh agak condong ke depan dengan kedua tangan menjaga keseimbangan.",
+                    "Dorong bola ke depan secara perlahan menggunakan kaki bagian luar, punggung kaki, atau sol sepatu.",
+                    "Jaga jarak bola agar selalu dekat dengan kaki sehingga tidak mudah direbut lawan.",
+                    "Pandangan mata tetap melihat ke arah depan lapangan, tidak hanya menunduk ke bawah."
+                ],
+                speech: "Langkah melakukan dribbling. Dorong bola perlahan dengan sentuhan lembut menggunakan kaki bagian luar atau punggung kaki. Jaga bola tetap dekat dan arahkan pandangan melihat ke depan."
+            },
+            control: {
+                title: "3. Langkah Control / Stopping (Menahan Bola dengan Sole)",
+                badge: "Teknik Khas Futsal!",
+                steps: [
+                    "Perhatikan arah datangnya bola operan dari teman.",
+                    "Angkat sedikit telapak kaki (sole sepatu) menghadap ke depan saat bola mendekat.",
+                    "Sentuh dan injak lembut bagian atas bola menggunakan telapak kaki (jangan diinjak terlalu keras).",
+                    "Tahan bola hingga berhenti diam di bawah telapak kaki dan siap dioper atau ditendang kembali."
+                ],
+                speech: "Langkah menahan bola khas futsal. Saat bola datang, angkat sedikit kaki dan hentikan bola menggunakan telapak kaki atau sole sepatu secara lembut hingga bola berhenti diam."
+            },
+            shooting: {
+                title: "4. Langkah Shooting (Menendang ke Gawang)",
+                badge: "Teknik Dasar 4",
+                steps: [
+                    "Amati posisi gawang dan ruang kosong yang jauh dari jangkauan penjaga gawang.",
+                    "Letakkan kaki tumpu kuat di samping bola dengan badan sedikit condong ke depan agar bola tidak melambung tinggi.",
+                    "Ayunkan kaki tendang dari belakang dengan kuat dan kenakan punggung kaki tepat di tengah bola.",
+                    "Lakukan gerak lanjutan (follow through) setelah menendang agar tendangan bertenaga."
+                ],
+                speech: "Langkah menendang ke gawang atau shooting. Letakkan kaki tumpu di samping bola, condongkan badan sedikit ke depan, lalu ayunkan punggung kaki dengan kuat mengenai bagian tengah bola ke arah gawang."
+            }
+        };
+
+        function openDetailModal(key) {
+            const data = techniqueSteps[key];
+            if (!data) return;
+            playKickSound();
+
+            const stepsHtml = data.steps.map((s, idx) => `
+                <li class="flex items-start gap-3 bg-court-50 p-3 rounded-2xl border border-court-200">
+                    <span class="bg-court-500 text-white font-black w-6 h-6 rounded-full flex items-center justify-center text-xs flex-shrink-0 mt-0.5 font-heading">${idx + 1}</span>
+                    <span class="text-xs md:text-sm text-slate-700 font-bold leading-relaxed">${s}</span>
+                </li>
+            `).join('');
+
+            document.getElementById('modal-body').innerHTML = `
+                <div class="border-b pb-3 pr-8">
+                    <span class="bg-sport-yellow text-slate-950 text-xs font-black px-3 py-1 rounded-full font-heading">${data.badge}</span>
+                    <h3 class="text-xl font-extrabold text-slate-900 mt-2 font-heading">${data.title}</h3>
+                </div>
+                <ul class="space-y-2.5">${stepsHtml}</ul>
+                <button onclick="speakText('${data.speech}')" class="w-full bg-turf-100 hover:bg-turf-400/40 text-turf-600 font-extrabold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 transition border border-turf-400">
+                    <i class="fa-solid fa-volume-high"></i> Dengarkan Langkah Gerakan
+                </button>
+            `;
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+            stopAllSpeech();
+        }
+
+        // 6. Interactive Quiz Engine (5 Questions for SD)
+        const futsalQuiz = [
+            {
+                question: "Berapa jumlah pemain inti dalam satu tim permainan futsal di dalam lapangan?",
+                options: [
+                    "11 pemain",
+                    "7 pemain",
+                    "5 pemain",
+                    "3 pemain"
+                ],
+                answer: 2,
+                explanation: "Setiap tim futsal bermain dengan 5 orang di lapangan (1 penjaga gawang/kiper dan 4 pemain lapangan)."
+            },
+            {
+                question: "Bola resmi yang digunakan dalam permainan futsal berukuran nomor...",
+                options: [
+                    "Ukuran 5",
+                    "Ukuran 4",
+                    "Ukuran 3",
+                    "Ukuran 1"
+                ],
+                answer: 1,
+                explanation: "Bola futsal menggunakan ukuran nomor 4 dengan pantulan lebih rendah (low bounce) agar mudah dikontrol."
+            },
+            {
+                question: "Bagian kaki manakah yang menjadi ciri khas utama untuk menahan bola (stopping) dalam permainan futsal?",
+                options: [
+                    "Telapak kaki (sole sepatu)",
+                    "Tumit kaki",
+                    "Lutut kaki",
+                    "Ujung jari kaki"
+                ],
+                answer: 0,
+                explanation: "Menghentikan bola dengan telapak kaki (sole sepatu) adalah ciri khas futsal karena permukaan lapangan rata dan bola tidak memantul tinggi."
+            },
+            {
+                question: "Jika bola keluar melewati garis samping lapangan futsal, permainan dilanjutkan kembali dengan cara...",
+                options: [
+                    "Lemparan ke dalam dengan dua tangan (Throw-in)",
+                    "Tendangan ke dalam dari atas garis (Kick-in)",
+                    "Bola dijatuhkan oleh wasit",
+                    "Tendangan penalti"
+                ],
+                answer: 1,
+                explanation: "Dalam futsal tidak ada lemparan ke dalam; bola yang keluar garis samping dikembalikan dengan tendangan ke dalam (kick-in)."
+            },
+            {
+                question: "Mengapa pemain futsal dilarang melakukan gerakan sliding tackle (menjatuhkan diri menekel lawan)?",
+                options: [
+                    "Agar sepatu tidak kotor",
+                    "Karena lapangan terlalu luas",
+                    "Untuk menjaga keselamatan dan mencegah cedera pada teman",
+                    "Karena bola menjadi kempes"
+                ],
+                answer: 2,
+                explanation: "Sliding tackle dilarang dalam futsal demi menjaga keselamatan pemain dan menjunjung tinggi sikap sportivitas (fair play)."
+            }
+        ];
+
+        let currentQ = 0;
+        let currentScore = 0;
+        let answered = false;
+
+        function renderQuizQuestion() {
+            answered = false;
+            const q = futsalQuiz[currentQ];
+            document.getElementById('question-number').textContent = `Soal ${currentQ + 1} dari ${futsalQuiz.length}`;
+            document.getElementById('live-score-text').textContent = `Skor: ${currentScore}`;
+            document.getElementById('question-text').textContent = q.question;
+
+            const optionsDiv = document.getElementById('options-container');
+            optionsDiv.innerHTML = '';
+            document.getElementById('feedback-box').classList.add('hidden');
+            document.getElementById('next-btn').classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-2xl border-2 border-slate-200 hover:border-court-500 hover:bg-court-50 transition text-xs md:text-sm font-extrabold text-slate-800 flex items-center justify-between group";
+                btn.innerHTML = `
+                    <span>${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-court-500 text-lg"></i>
+                `;
+                btn.onclick = () => checkAnswer(idx, btn);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function readCurrentQuestion() {
+            const q = futsalQuiz[currentQ];
+            speakText(`${q.question}. Pilihan A: ${q.options[0]}. Pilihan B: ${q.options[1]}. Pilihan C: ${q.options[2]}. Pilihan D: ${q.options[3]}.`);
+        }
+
+        function checkAnswer(selectedIdx, btn) {
+            if (answered) return;
+            answered = true;
+
+            const q = futsalQuiz[currentQ];
+            const feedback = document.getElementById('feedback-box');
+            const allBtns = document.getElementById('options-container').children;
+
+            if (selectedIdx === q.answer) {
+                currentScore += 20;
+                document.getElementById('live-score-text').textContent = `Skor: ${currentScore}`;
+                playQuizFeedbackSound(true);
+
+                btn.className = "w-full text-left p-4 rounded-2xl border-2 border-turf-500 bg-emerald-50 text-emerald-950 font-extrabold text-xs md:text-sm flex items-center justify-between";
+                btn.querySelector('i').className = "fa-solid fa-circle-check text-turf-600 text-xl";
+
+                feedback.className = "mt-4 p-4 rounded-2xl text-center font-bold text-xs md:text-sm bg-emerald-100 text-emerald-950 border-2 border-turf-400";
+                feedback.innerHTML = `🎉 HEBAT, JAWABANMU BENAR! ${q.explanation}`;
+            } else {
+                playQuizFeedbackSound(false);
+
+                btn.className = "w-full text-left p-4 rounded-2xl border-2 border-rose-500 bg-rose-50 text-rose-950 font-extrabold text-xs md:text-sm flex items-center justify-between";
+                btn.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-600 text-xl";
+
+                allBtns[q.answer].className = "w-full text-left p-4 rounded-2xl border-2 border-turf-500 bg-emerald-50 text-emerald-950 font-extrabold text-xs md:text-sm flex items-center justify-between";
+                allBtns[q.answer].querySelector('i').className = "fa-solid fa-circle-check text-turf-600 text-xl";
+
+                feedback.className = "mt-4 p-4 rounded-2xl text-center font-bold text-xs md:text-sm bg-rose-100 text-rose-950 border-2 border-rose-300";
+                feedback.innerHTML = `😊 BELUM TEPAT! Jawaban yang benar adalah <strong>${q.options[q.answer]}</strong>. ${q.explanation}`;
+            }
+
+            feedback.classList.remove('hidden');
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.innerHTML = (currentQ < futsalQuiz.length - 1)
+                ? `Soal Berikutnya <i class="fa-solid fa-arrow-right"></i>`
+                : `Lihat Hasil Nilai <i class="fa-solid fa-trophy"></i>`;
+            nextBtn.classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQ < futsalQuiz.length - 1) {
+                currentQ++;
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resBox = document.getElementById('result-container');
+            resBox.classList.remove('hidden');
+
+            document.getElementById('final-score').textContent = currentScore;
+            const starsCount = Math.max(1, Math.round(currentScore / 20));
+            document.getElementById('stars-earned').textContent = '⭐'.repeat(starsCount);
+
+            if (currentScore >= 80) {
+                document.getElementById('result-message').textContent = "Luar biasa! Kamu benar-benar juara futsal SD yang paham teknik dan sportivitas! ⚽🏆";
+                playGoalCheerSound();
+                confetti({ particleCount: 130, spread: 85, origin: { y: 0.6 } });
+            } else if (currentScore >= 60) {
+                document.getElementById('result-message').textContent = "Bagus sekali! Terus berlatih agar kemampuan futsalmu semakin hebat!";
+            } else {
+                document.getElementById('result-message').textContent = "Tetap semangat! Ayo baca kembali materinya dan coba kuis sekali lagi ya!";
+            }
+        }
+
+        function resetQuiz() {
+            currentQ = 0;
+            currentScore = 0;
+            document.getElementById('result-container').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+
+        window.onload = function() {
+            renderQuizQuestion();
+        };
+    </script>
+</body>
+</html>
